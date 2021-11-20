@@ -53,7 +53,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
             height: 30,
           ),
           TextFormField(
-            validator: (val) => val!.contains('@') && val!.length >= 6
+            validator: (val) => val!.contains('@') && val.length >= 6
                 ? null
                 : 'Input a valid password',
             obscureText: passwordStatus,

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:auth_ui/widgets/custom_input_field.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatelessWidget {
   late bool emailStatus;
@@ -25,12 +26,68 @@ class Login extends StatelessWidget {
               ),
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(25, 30, 15, 0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  child: Text(
+                                    'V',
+                                    style: GoogleFonts.cormorant(
+                                        textStyle: TextStyle(
+                                      fontSize: 120,
+                                      color: Colors.white,
+                                    )),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 30,
+                                  left: 10,
+                                  child: Text(
+                                    'L',
+                                    style: GoogleFonts.condiment(
+                                        textStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 100,
+                                    )),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  child: Text(
+                                    'LOUIS VUITTO',
+                                    style: GoogleFonts.abel(
+                                        textStyle: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              'WELCOME \nBACK',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 25, height: 2),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
                 Container(
-                    height: MediaQuery.of(context).size.height * 0.7,
+                    height: MediaQuery.of(context).size.height * 0.6,
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: Colors.white,
