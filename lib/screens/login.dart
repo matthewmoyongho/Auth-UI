@@ -1,14 +1,59 @@
 import 'dart:convert';
 
-import 'package:auth_ui/widgets/custom_input_field.dart';
+import 'package:auth_ui/widgets/auth_form.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Login extends StatelessWidget {
-  late bool emailStatus;
-  late bool passwordStatus;
+class Login extends StatefulWidget {
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool loading = false;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  bool _isLogin = true;
+
   @override
   Widget build(BuildContext context) {
+    void _trySubmt(String _userEmail, String _userPassword, bool _isLogin,
+        BuildContext ctx) async {
+      UserCredential _authResul;
+      try {
+        setState(() {
+          loading = true;
+        });
+
+        if (_isLogin) {
+          _authResul = await _auth.signInWithEmailAndPassword(
+              email: _userEmail.trim(), password: _userPassword.trim());
+        } else {
+          _authResul = await _auth.createUserWithEmailAndPassword(
+              email: _userEmail.trim(), password: _userPassword.trim());
+        }
+        setState(() {
+          loading = false;
+        });
+      } on PlatformException catch (e) {
+        setState(() {
+          loading = false;
+        });
+
+        ScaffoldMessenger.of(ctx)
+            .showSnackBar(SnackBar(content: Text('${e.message}')));
+      } catch (e) {
+        setState(() {
+          loading = false;
+        });
+
+        print(e);
+      }
+    }
+
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -86,28 +131,20 @@ class Login extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30))),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(25, 25, 25, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Log in',
-                            style: TextStyle(
-                                fontSize: 35, fontWeight: FontWeight.bold),
-                          ),
-                          CustomInputField(),
-                        ],
-                      ),
-                    )),
+                SingleChildScrollView(
+                  child: Container(
+                      height: MediaQuery.of(context).size.height * 0.55,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30))),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(25, 25, 25, 0),
+                        child: AuthForm(_trySubmt, loading),
+                      )),
+                ),
               ],
             ),
           ),
